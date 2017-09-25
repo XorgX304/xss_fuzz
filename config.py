@@ -29,6 +29,7 @@ class Config(dict):
     conf = {'Program_name': 'xssfuzz',
 
             'version': '1.0',
+            'cookie': None,
 
             'mode_list': {
                 'Filter': url,

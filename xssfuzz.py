@@ -33,6 +33,7 @@ def help():
     args.add_option('-d', '--data', dest='data', help='post data')
     args.add_option('-p', '--payload', dest='payload', default='tag', help='default \'"<tag>')
     args.add_option('-l', '--list', dest='list', help='list all payload')
+    args.add_option('-c', '--cookies', dest='cookie', help='request cookie')
     (arg, _) = args.parse_args()
     return arg, args
 
@@ -45,9 +46,11 @@ def main():
     if arg.list:
         for _ in conf.payloads.keys():
             print(_)
+        exit()
 
     if not arg.url:
         args.print_help()
+        exit()
 
     conf.update(arg.__dict__)
 

@@ -29,6 +29,7 @@ class Waf:
         self.lock = Lock()
         self.quest = Queue()
         self.ret = Queue()
+        self.cookies = None
 
     @abstractmethod
     def check(self, url, **kwargs):
@@ -52,9 +53,8 @@ class Waf:
         :rtype: object:requests.Response
         """
         try:
-            print(url)
             Log.info('get url {url}'.format(url=url))
-            return get(url=url, **kwargs)
+            return get(url=url,proxies=self._proxies, cookies=self.cookies, **kwargs)
         except HTTPError:
             Log.error('{url} http error'.format(url=url))
         except ConnectTimeout:
@@ -64,14 +64,15 @@ class Waf:
         except RequestException:
             Log.error('{url} request error'.format(url=url))
 
-    def url_post(url, data=None, json=None, **kwargs):
+    def url_post(self, url, data=None, json=None, **kwargs):
         """url post method
 
         :param kwargs:
         :rtype: object:requests.Response
         """
         try:
-            Log.info('post url {url} data {data} '.format(url=url, data=data))
+            Log.info(
+                'post url {url} data {data} '.format(url=url, data=data, cookies=self.cookies, proxies=self._proxies))
             return post(url=url, data=data, json=json, **kwargs)
         except HTTPError:
             Log.error('{url} http error'.format(url=url))
@@ -90,7 +91,7 @@ class Waf:
         self._proxies.update(proxy)
         Log.info('set proxy success')
 
-    def post_attack(self, url, data):
+    def post_attack(self, url, data, **kwargs):
         """post attack api
         Lock is already in use
         :param url: attack url
@@ -104,19 +105,18 @@ class Waf:
                 _ = args[:]
                 _[x] = _[x] + payload
                 req_data = '&'.join(_)
-                response = self.url_post(url=url, data=req_data, headers=self._headers,
-                                     proxies=self._proxies)
+                response = self.url_post(url=url, data=req_data, headers=self._headers,**kwargs
+                                         )
                 try:
                     if self.lock.acquire():
                         ret.append({'payload': payload,
                                     'arg': args[x],
-                                   'response': response})
+                                    'response': response})
+                        self.ret.put(ret)
                 finally:
                     self.lock.release()
 
-        self.ret.put(ret)
-
-    def get_attack(self,url):
+    def get_attack(self, url, **kwargs):
         """get attack api
         Lock is already in use
         :param url: attack url
@@ -133,15 +133,14 @@ class Waf:
             for _ in range(len(args)):
                 __ = args[:]
                 __[_] = __[_] + payload
-                get_url = path+'?' + '&'.join(__)
-                response = self.url_get(get_url, headers=self._headers,
-                                        proxies=self._proxies)
+                get_url = path + '?' + '&'.join(__)
+                response = self.url_get(get_url, headers=self._headers, **kwargs)
 
                 try:
-                        self.lock.acquire()
-                        ret.append({'payload': payload, 'arg': args[_],
-                                    'response': response})
-                        self.ret.put(ret)
+                    self.lock.acquire()
+                    ret.append({'payload': payload, 'arg': args[_],
+                                'response': response})
+                    self.ret.put(ret)
                 finally:
                     self.lock.release()
 
@@ -151,7 +150,6 @@ class Waf:
                 func(*args, **kwargs)
         finally:
             self.lock.release()
-
 
 
 def check_exp(func):
@@ -164,4 +162,3 @@ def check_exp(func):
             return func(*args, **kwargs)
 
     return _func
-
