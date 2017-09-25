@@ -62,7 +62,7 @@ class Config(dict):
             },
 
             # thread num
-            'threads_count': 16,
+            'thread_num': 16,
             }
 
 conf = Config()

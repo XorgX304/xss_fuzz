@@ -146,5 +146,10 @@ class Tag(Xssdata, Base):
         for tag in self._tag_list:
             yield tag
 
+    def __str__(self):
+        return self._tag_list.pop()
+
+
+
 
 

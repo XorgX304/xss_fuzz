@@ -4,7 +4,6 @@
 
 from optparse import OptionParser
 from lib.log import log_out, Log
-import pdb
 import warnings
 
 warnings.filterwarnings(action="ignore", message=".*was already imported", category=UserWarning)
@@ -39,11 +38,9 @@ def help():
 
 
 def main():
-    attack = None
     log_out(conf, Log)
     print(banner(conf.Program_name))
     arg, args = help()
-    arg.list = True
 
     if arg.list:
         for _ in conf.payloads.keys():
@@ -69,7 +66,7 @@ def main():
         raise ArgERROR(message=errmsg)
     payload = data.get_payload(conf)
     fuzz = attack.get_waf(conf, payload)
-
+    fuzz.check(conf.url)
 
 
 if __name__ == '__main__':
