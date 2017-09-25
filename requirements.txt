@@ -1,0 +1,7 @@
+requests
+werkzeug
+pyfiglet
+colorama
+mechanize
+prettytable
+progressbar
