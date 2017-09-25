@@ -2,33 +2,67 @@
 # coding:utf-8
 # Author qingniao
 from waf import url, num
+from payload import tag
 
 
-class Config:
+class Config(dict):
+    """config class
+    >>> foo = Config()
+    >>> foo.bar = 1
+    >>> foo.bar
+        1
+    """
+
     def __init__(self):
-        pass
+        super(dict, Config).__init__(self)
+        self.update(self.conf)
 
-    Program_name = 'xssfuzz'
+    def __getattr__(self, item):
+        try:
+            return self.__getitem__(item)
+        except KeyError:
+            raise AttributeError("unable to access item '%s'" % item)
 
-    mode_list = {
-        'Filter': url,
-        'Intercept': num,
-    }
+    def __setattr__(self, key, value):
+        return self.__setitem__(key, value)
 
-    # CRITICAL = 50 ERROR = 40 WARNING = 30
-    # INFO = 20 DEBUG = 10 NOTSET = 0
-    # look logging._levelNames
-    log_level = None
+    conf = {'Program_name': 'xssfuzz',
 
-    # Warning, please know what you are doing before changing here
-    # If it is a string, Convert to file object
-    log_output = None
-    # log file  max size
-    log_maxsize = None
+            'version': '1.0',
 
-    # Shutdown will not be output at the console
-    log_debug = True
+            'mode_list': {
+                'Filter': url,
+                'Intercept': num,
+            },
 
-    proxy = None
+            'payloads': {
+                'tag': tag,
+            },
 
+            # url = 'www.test.com'
 
+            # CRITICAL = 50 ERROR = 40 WARNING = 30
+            # INFO = 20 DEBUG = 10 NOTSET = 0
+            # look logging._levelNames
+            'log_level': None,
+
+            # Warning, please know what you are doing before changing here
+            # If it is a string, Convert to file object
+            'log_output': None,
+            # log file  max size
+            'log_maxsize': None,
+
+            # Shutdown will not be output at the console
+            'log_debug': True,
+
+            'proxy': {
+                # "http": "http://user:pass@10.10.1.10:3128/",
+                # "https": "http://10.10.1.10:1080",
+                # "http": "http://127.0.0.1:8118", # TOR
+            },
+
+            # thread num
+            'threads_count': 16,
+            }
+
+conf = Config()

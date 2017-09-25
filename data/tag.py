@@ -143,7 +143,8 @@ class Tag(Xssdata, Base):
     def get(self):
         if self._debug:
             set_trace()
-        return self._tag_list.pop()
+        for tag in self._tag_list:
+            yield tag
 
-    def __str__(self):
-        return self.get()
+
+
