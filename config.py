@@ -1,6 +1,10 @@
 #! /usr/bin/env python
 # coding:utf-8
 # Author qingniao
+from os import getcwdu
+
+from os.path import dirname, realpath
+
 from waf import url, num
 from payload import tag
 
@@ -42,6 +46,12 @@ class Config(dict):
 
             # url = 'www.test.com'
 
+            ######################
+            # output config
+            ######################
+            # if not,not output log
+            'log': True,
+
             # CRITICAL = 50 ERROR = 40 WARNING = 30
             # INFO = 20 DEBUG = 10 NOTSET = 0
             # look logging._levelNames
@@ -49,7 +59,11 @@ class Config(dict):
 
             # Warning, please know what you are doing before changing here
             # If it is a string, Convert to file object
-            'log_output': None,
+            # if not , it should is a file object
+            # 'log_output':sys.stderr ,
+            'log_file': 'log.log',
+            'log_path': 'output',
+
             # log file  max size
             'log_maxsize': None,
 
@@ -64,6 +78,9 @@ class Config(dict):
 
             # thread num
             'thread_num': 16,
+
+            # path info
+            'dir': dirname(realpath('.')),
             }
 
 conf = Config()

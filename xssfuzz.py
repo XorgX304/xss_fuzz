@@ -3,7 +3,8 @@
 # Author qingniao
 
 from optparse import OptionParser
-from lib.log import log_out, Log
+from lib.log import log_out
+from logging import error
 import warnings
 
 warnings.filterwarnings(action="ignore", message=".*was already imported", category=UserWarning)
@@ -16,7 +17,7 @@ try:
     from lib.error import ArgERROR
 except ImportError as e:
     errmsg = e.message.split('named')[1]
-    Log.error('{error}'.format(error=errmsg))
+    error('{error}'.format(error=errmsg))
     exit()
 
 
@@ -39,7 +40,7 @@ def help():
 
 
 def main():
-    log_out(conf, Log)
+    log_out(conf)
     print(banner(conf.Program_name))
     arg, args = help()
 

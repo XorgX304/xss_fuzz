@@ -4,35 +4,32 @@
 from logging.handlers import RotatingFileHandler
 from sys import stderr
 from logging import getLogger, ERROR, StreamHandler
+from os.path import join, isdir
 
-Log = getLogger()
-Log.setLevel(ERROR)
-error = StreamHandler(stderr)
-Log.addHandler(error)
+from os import mkdir
 
 
-def log_out(conf, log):
+def log_out(conf):
     """set log output
     set log file and level
     :return: None
     """
     try:
-        if conf.log_level:
-            log.setLevel(conf.log_level)
-    except Exception as e:
-        log.error(e)
-        log.error('level keep is error')
-    try:
-        if conf.log_output:
-            out = conf.log_output
-            if isinstance(conf.log_output, str):
-                out = RotatingFileHandler(conf.log_output, conf.log_maxsize)
-            # Make sure you enter an Output object,I can't make sure this object is correct.
-            # Modify here, I believe you are capable
-            log.addHandler(out)
-        if not conf.log_debug:
-            log.removeHandler(stderr)
-    except Exception as e:
+        if not conf.log:
+            return False
+        Log = getLogger()
+        if isinstance(conf.log_file, str):
+            if not isdir(conf.log_path):
+                mkdir(conf.log_path)
+            path = join(conf.log_path, conf.file)
+            f = RotatingFileHandler(path, mode='a+', maxBytes=conf.log_maxsize)
+            Log.addHandler(f)
+        else:
+            Log.addHandler(conf.log_output)
 
-        log.error(e)
-        log.error('log out keep is stderr')
+        if conf.log_level:
+            Log.setLevel(conf.log_level)
+        else:
+            Log.setLevel(ERROR)
+    except IOError as e:
+        Log.error('Log file error, No such file or directory')
