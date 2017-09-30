@@ -4,20 +4,21 @@
 
 from optparse import OptionParser
 from lib.log import log_out
-from logging import error
+from logging import getLogger
 import warnings
 
 warnings.filterwarnings(action="ignore", message=".*was already imported", category=UserWarning)
 warnings.filterwarnings(action="ignore", category=DeprecationWarning)
 
-try:
+Log = getLogger()
 
+try:
     from config import conf as conf
     from lib.version import banner
     from lib.error import ArgERROR
 except ImportError as e:
-    errmsg = e.message.split('named')[1]
-    error('{error}'.format(error=errmsg))
+    errmsg = e.message.split('named')[0]
+    Log.error('{error}'.format(error=errmsg))
     exit()
 
 
@@ -74,9 +75,10 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except ArgERROR as e:
-        Log.error(ArgERROR.errmsg)
-    except KeyboardInterrupt:
-        Log.error('user exit')
+    #   try:
+    Log = getLogger()
+    main()
+#    except ArgERROR as e:
+#       Log.error(ArgERROR.errmsg)
+#  except KeyboardInterrupt:
+#     Log.error('user exit')

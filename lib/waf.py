@@ -2,14 +2,14 @@
 # coding:utf-8
 # Author qingniao
 from __future__ import print_function
-
-import pdb
 from abc import ABCMeta, abstractmethod
 from requests.api import get, post
 from requests.exceptions import HTTPError, ConnectionError, RequestException, ConnectTimeout
-from log import Log
+from log import getLogger
 from threading import Lock
 from Queue import Queue
+
+Log = getLogger()
 
 
 class Waf:

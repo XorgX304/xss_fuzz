@@ -2,8 +2,7 @@
 # coding:utf-8
 # Author qingniao
 from logging.handlers import RotatingFileHandler
-from sys import stderr
-from logging import getLogger, ERROR, StreamHandler
+from logging import getLogger, ERROR
 from os.path import join, isdir
 
 from os import mkdir
@@ -21,7 +20,7 @@ def log_out(conf):
         if isinstance(conf.log_file, str):
             if not isdir(conf.log_path):
                 mkdir(conf.log_path)
-            path = join(conf.log_path, conf.file)
+            path = join(conf.log_path, conf.log_file)
             f = RotatingFileHandler(path, mode='a+', maxBytes=conf.log_maxsize)
             Log.addHandler(f)
         else:
@@ -32,4 +31,5 @@ def log_out(conf):
         else:
             Log.setLevel(ERROR)
     except IOError as e:
+        Log = getLogger()
         Log.error('Log file error, No such file or directory')
