@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # coding:utf-8
 # Author qingniao
-from os import getcwdu
+from os import getcwdu, os
 
 from os.path import dirname, realpath
 
@@ -73,7 +73,7 @@ class Config(dict):
             # if not , it should is a file object
             # 'log_output':sys.stderr ,
             'log_file': 'log.log',
-            'log_path': 'output',
+            'log_path': os.path.join(os.getcwd(), 'output'),
 
             # log file  max size
             'log_maxsize': None,

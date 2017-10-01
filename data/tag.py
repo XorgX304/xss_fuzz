@@ -5,7 +5,6 @@ from pdb import set_trace
 
 from lib.base import Base
 from lib.data import Xssdata
-from collections import Iterable
 
 
 class Tag(Xssdata, Base):

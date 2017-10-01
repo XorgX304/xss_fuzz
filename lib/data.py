@@ -10,7 +10,6 @@ class Xssdata:
     __doc__ = 'data base class'
 
     def __init__(self):
-        super(Xssdata, self).__init__()
         self._name = 'data'
         self.version = '1.0'
 
@@ -26,9 +25,6 @@ class Xssdata:
         """
         pass
 
-    @abstractmethod
-    def __str__(self):
-        pass
 
 
 
