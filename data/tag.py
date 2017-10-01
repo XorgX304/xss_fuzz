@@ -5,6 +5,7 @@ from pdb import set_trace
 
 from lib.base import Base
 from lib.data import Xssdata
+from collections import Iterable
 
 
 class Tag(Xssdata, Base):
@@ -13,6 +14,10 @@ class Tag(Xssdata, Base):
     __version__ = '1.0'
 
     def __init__(self):
+        """
+
+        :rtype: object
+        """
         self._debug = False
         self._tag_list = [
             'a',
@@ -138,7 +143,11 @@ class Tag(Xssdata, Base):
         ]
 
     def debug(self, level):
+        if self._debug:
+            self._debug = False
+            return False
         self._debug = True
+        return True
 
     def get(self):
         if self._debug:
@@ -148,6 +157,7 @@ class Tag(Xssdata, Base):
 
     def __str__(self):
         return self._tag_list.pop()
+
 
 
 

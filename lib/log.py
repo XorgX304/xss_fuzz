@@ -4,6 +4,7 @@
 from logging.handlers import RotatingFileHandler
 from logging import getLogger, ERROR
 from os.path import join, isdir
+from sys import  stdout
 
 from os import mkdir
 
@@ -25,7 +26,8 @@ def log_out(conf):
             Log.addHandler(f)
         else:
             Log.addHandler(conf.log_output)
-
+        if conf.log_debug:
+            Log.addHandler(stdout)
         if conf.log_level:
             Log.setLevel(conf.log_level)
         else:

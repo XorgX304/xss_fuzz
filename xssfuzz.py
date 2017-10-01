@@ -29,7 +29,7 @@ def help():
     :return:args:optionparser object
     """
     args = OptionParser(version=conf.version)
-    args.add_option('-m', '--mode', dest='mode', default='Filter', help='xss fuzz test mode')
+    args.add_option('-m', '--mode', dest='mode', default='defult', help='xss fuzz test mode')
     args.add_option('-t', '--thread', dest='thread', help='thread num')
     args.add_option('-u', '--url', dest='url', help='fuzz test url')
     args.add_option('-d', '--data', dest='data', help='post data')
@@ -72,6 +72,7 @@ def main():
     payload = data.get_payload(conf)
     fuzz = attack.get_waf(conf, payload)
     fuzz.check(conf.url)
+    Log.info('test finish, result file {name}'.format(name=conf.output_file))
 
 
 if __name__ == '__main__':

@@ -138,8 +138,9 @@ class Waf:
 
                 try:
                     self.lock.acquire()
-                    ret.append({'payload': payload, 'arg': args[_],
-                                'response': response})
+                    if response:
+                        ret.append({'payload': payload, 'arg': args[_],
+                                    'response': response})
                     self.ret.put(ret)
                 finally:
                     self.lock.release()
