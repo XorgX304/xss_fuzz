@@ -39,13 +39,21 @@ Example
 -
 ~~~
 ./xssfuzz.py -u 'www.baidu.com?id=1'
-#This is the WAF detector for the jump domain name 
+#This will use default WAF set
 ~~~
 
 config
 -
 see `config.py`
-What's important is the two? `mode_list` and `payloads`
+default  mode config 
+```
+ # while url num
+ 'white_num': [200],
+ # black url num, while_num priority
+ 'black_num': [504, 405, 403],
+ # waf features, waf return string
+ 'waf_str': [],
+```
 
 see `payload/tag.py` 
 changes it will changes default payload 
@@ -53,13 +61,7 @@ changes it will changes default payload
  self.exploit = '\'"><{tag}></{tagend}>'
 ~~~
 
-see `waf/Url.py`
-~~~
- for _ in tmp:
-        if not urlparse(_['response'].url).netloc == url:
-                    self.exp.append(_)
-~~~
-it is detector method
+
 
 Development
 -
