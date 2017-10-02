@@ -2,8 +2,7 @@
 # coding:utf-8
 # Author qingniao
 
-from optparse import OptionParser
-from lib.log import log_out
+
 from logging import getLogger
 import warnings
 
@@ -16,45 +15,28 @@ try:
     from config import conf as conf
     from lib.version import banner
     from lib.error import ArgERROR
+    from lib.log import log_out
+    from lib.cmdline import cmdLineParser
 except ImportError as e:
     errmsg = e.message.split('named')[0]
-    Log.error('{error}'.format(error=errmsg))
+    print errmsg
     exit()
 
 
-def help():
-    """args process
 
-    :return:arg: args
-    :return:args:optionparser object
-    """
-    args = OptionParser(version=conf.version)
-    args.add_option('-m', '--mode', dest='mode', default='defult', help='xss fuzz test mode')
-    args.add_option('-t', '--thread', dest='thread', help='thread num')
-    args.add_option('-u', '--url', dest='url', help='fuzz test url')
-    args.add_option('-d', '--data', dest='data', help='post data')
-    args.add_option('-p', '--payload', dest='payload', default='tag', help='default \'"<tag>')
-    args.add_option('-l', '--list', dest='list', help='list all payload')
-    args.add_option('-c', '--cookies', dest='cookie', help='request cookie')
-    (arg, _) = args.parse_args()
-    return arg, args
 
 
 def main():
     log_out(conf)
     print(banner(conf.Program_name))
-    arg, args = help()
-
-    if arg.list:
-        for _ in conf.payloads.keys():
-            print(_)
+    args = cmdLineParser()
+    conf.update(cmdLineParser().parse_args()[0].__dict__)
+    if conf.version:
+        print conf.version
         exit()
-
-    if not arg.url:
+    if conf.url is None:
         args.print_help()
         exit()
-
-    conf.update(arg.__dict__)
 
     try:
         attack = conf.mode_list[conf.mode]
@@ -62,7 +44,7 @@ def main():
         errmsg = 'mode {name} is not exist'.format(name=conf)
         raise ArgERROR(errmsg)
 
-    Log.info('attack mode {name}'.format(name=arg.mode))
+    Log.info('attack mode {name}'.format(name=conf.mode))
 
     try:
         data = conf.payloads[conf.payload]

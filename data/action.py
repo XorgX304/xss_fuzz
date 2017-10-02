@@ -7,7 +7,7 @@ from lib.base import Base
 from lib.data import Xssdata
 
 
-class Char(Xssdata, Base):
+class Action(Xssdata, Base):
     __author__ = 'qingniao'
     __doc__ = 'return action attribute'
     __version__ = '1.0'

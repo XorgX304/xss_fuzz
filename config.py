@@ -1,9 +1,10 @@
 #! /usr/bin/env python
 # coding:utf-8
 # Author qingniao
-from os import getcwdu, os
+from os import getcwdu
 
-from os.path import dirname, realpath
+from os.path import dirname, realpath, join
+from os import getcwd
 
 from waf import defult
 from payload import tag
@@ -32,7 +33,7 @@ class Config(dict):
 
     conf = {'Program_name': 'xssfuzz',
 
-            'version': '1.0',
+            'version': 'xssfuzz 1.0 beat',
 
 
             'mode_list': {
@@ -73,7 +74,7 @@ class Config(dict):
             # if not , it should is a file object
             # 'log_output':sys.stderr ,
             'log_file': 'log.log',
-            'log_path': os.path.join(os.getcwd(), 'output'),
+            'log_path': join(getcwd(), 'output'),
 
             # log file  max size
             'log_maxsize': None,
