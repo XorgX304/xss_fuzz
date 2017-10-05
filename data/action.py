@@ -13,6 +13,8 @@ class Action(Xssdata, Base):
     __version__ = '1.0'
 
     def __init__(self):
+        Base(Action, self).__init__(name='action', version='1.0')
+
         self._debug = False
         self._data = [
             'onafterprint',
@@ -90,6 +92,7 @@ class Action(Xssdata, Base):
     def get(self):
         if self._debug:
             set_trace()
+
         for char in self._data:
             yield char
 

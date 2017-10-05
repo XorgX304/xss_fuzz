@@ -19,7 +19,7 @@ class Config(dict):
     """
 
     def __init__(self):
-        super(dict, Config).__init__(self)
+        super(Config,self).__init__()
         self.update(self.conf)
 
     def __getattr__(self, item):

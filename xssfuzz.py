@@ -9,21 +9,17 @@ import warnings
 warnings.filterwarnings(action="ignore", message=".*was already imported", category=UserWarning)
 warnings.filterwarnings(action="ignore", category=DeprecationWarning)
 
-Log = getLogger()
-
 try:
     from config import conf as conf
     from lib.version import banner
     from lib.error import ArgERROR
     from lib.log import log_out
     from lib.cmdline import cmdLineParser
+    import config
 except ImportError as e:
     errmsg = e.message.split('named')[0]
     print errmsg
     exit()
-
-
-
 
 
 def main():
@@ -58,10 +54,8 @@ def main():
 
 
 if __name__ == '__main__':
-    #   try:
-    Log = getLogger()
-    main()
-#    except ArgERROR as e:
-#       Log.error(ArgERROR.errmsg)
-#  except KeyboardInterrupt:
-#     Log.error('user exit')
+    try:
+        Log = getLogger()
+        main()
+    except KeyboardInterrupt:
+        Log.info('user exit')

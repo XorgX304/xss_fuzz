@@ -7,9 +7,9 @@ class Base:
     __author__ = 'qingniao'
     __doc__ = 'base class'
 
-    def __init__(self):
-        self._name = 'data'
-        self.version = '1.0'
+    def __init__(self, name, version):
+        self._name = name
+        self.version = version
 
     def getname(self):
         return self.name

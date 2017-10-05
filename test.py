@@ -28,7 +28,7 @@ class TestData(TestCase):
 
 class TestLog(TestCase):
     def setUp(self):
-        super(TestLog,self).setUp()
+        super(TestLog, self).setUp()
 
     def test_log(self):
         log_out(conf)
